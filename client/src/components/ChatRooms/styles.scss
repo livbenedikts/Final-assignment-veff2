@@ -1,0 +1,51 @@
+.chatRooms{
+    border: 1px solid red;
+    display: grid;
+    padding: 10px;
+
+}
+
+.chatRoomLis {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    margin-left: 10px;
+
+}
+
+.singleRoom {
+   display: grid;
+   grid-template-areas: 
+        "roomName joinBtn leaveBtn"
+        "roomUsers roomUsers roomUsers";
+    grid-template-columns: 1fr 1fr 1fr;
+   
+    #roomName{
+        grid-area: roomName;
+       
+    }
+
+    #joinBtn{
+        grid-area: joinBtn;
+ 
+    }
+    #leaveBtn{
+        grid-area: leaveBtn;
+
+    }
+    #roomUsers{
+        grid-area: roomUsers;
+        display: flex;
+        flex-direction: row;
+        float: left;
+        
+        #names {
+            font-variant: normal;
+            color: gray;
+            margin: 2px;
+        }
+
+        
+    }
+}
