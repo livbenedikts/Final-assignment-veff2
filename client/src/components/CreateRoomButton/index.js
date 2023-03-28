@@ -1,25 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 import { Button } from '@mui/material';
+import classNames from 'classnames';
 import io from 'socket.io-client';
 // import './styles.scss'
+
+
 const socket = io.connect('http://localhost:8080');
 
-const CreateRoom = () => {
+const CreateRoomBtn = ({className}) => {
+    const menuClasses = classNames('createRoomBtn', className);
 
-    const socket = useSelector(({socket}) => socket);
-    const username = useSelector((session) => session.username);
     const navigate = useNavigate();
+    const location = useLocation();
+    const { username } = location.state;
 
     const gotoCreateRoom = (e) => {
         e.preventDefault();
-        socket.username = username;
+        // socket.username = username;
         navigate('/createRoom', { state: { username } });
     };
 
     return (
-        <div>
+        <div className={menuClasses}>
             <Button variant='contained' onClick={gotoCreateRoom}>Create Room</Button>
         </div>
     );
@@ -27,4 +33,4 @@ const CreateRoom = () => {
 
 }
 
-export default CreateRoom;
+export default CreateRoomBtn;
