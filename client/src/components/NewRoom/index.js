@@ -1,27 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
 import { useLocation } from 'react-router-dom';
 import { Button, TextField, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:8080');
+// const socket1 = io.connect('http://localhost:8080');
 
 
 
 const NewRoom = () => {
     const location = useLocation();
     const { username } = location.state;
-    const [user, setUser] = React.useState(username);
+    const [user, setUser] = useState([]);
+    const users = useSelector(({session}) => session);
+
+    const [userList, setUserList] = useState([]);
+    const socket = useSelector(({socket}) => socket);
+
     const [room, setRoom] = React.useState('');
     const [pass, setPass] = React.useState(undefined);
     const [topic, setTopic] = React.useState('');
     const [locked, setLocked] = React.useState(false);
     const [roomList, setRoomList] = React.useState([]);
     const navigate = useNavigate();
-    
-   
-    // const location = useLocation();
-    
 
     const handlePasswordChange = (event) => {setPass(event.target.value) };
     const handleRoomChange = (event) => {setRoom(event.target.value) };
@@ -47,6 +49,14 @@ const NewRoom = () => {
         // Get the list of connected users when the component mounts
         socket.emit("users");
 
+        socket.on("userlist", (users) => {
+            console.log("from server ",users)
+            setUserList(users);
+           
+        });
+
+   
+
         // Listen for updates to the list of available rooms
         socket.on("roomlist", (room) => {
             setRoomList(
@@ -60,19 +70,29 @@ const NewRoom = () => {
 
         return () => {
             socket.off("roomlist");
+            socket.off("userlist");
         }
     }, [socket]);
 
+ 
 
     const createRoom = () => {
-        // var room = {
-        //     room: room,
-        //     pass: pass,
-        //     topic: topic,
-        //     // locked: locked,
-        //     username: username
-        // }
-        socket.emit('joinroom',   {room: room, pass: undefined }, (success) => {
+        socket.username = username;
+        var joinObj = {
+            room,
+            pass,
+            topic,
+            // locked: locked,
+            username: socket.username,
+        }
+        console.log(joinObj)
+        // console.log(roomList)
+        // setPass(undefined)
+        // console.log(username)
+        // setUser(username)
+        // console.log("Nei hæ",user)
+        
+        socket.emit('joinroom', {room, pass, topic, username: socket.username}, (success) => {
             if (success) {
                 console.log('success');
                 alert('room created');
@@ -80,7 +100,11 @@ const NewRoom = () => {
                 // var room = room.room;
                 // console.log('New room ',roomName, 'created by ', username);
                 console.log(room)
+                var roomName = room;
+                setRoomList(...roomList, roomName)
+                navigate('/chat', { state: { roomName } });
                 // navigate("/chat", { state: { roomName, room} })
+                
             
             } else {
                 console.log('fail');}

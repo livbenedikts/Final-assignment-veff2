@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import classNames from 'classnames';
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
@@ -8,8 +7,7 @@ import './styles.scss'
 import { addSession } from '../../actions/sessionActions';
 const socket = io.connect('http://localhost:8080');
 
-const ActiveRooms = ({className}) => {
-    const menuClasses = classNames('activeRooms', className);
+const ActiveRooms = () => {
     const socket = useSelector(({socket}) => socket);
     const username = useSelector(({session}) => session);
     const [userList, setUserList] = useState([]);
@@ -81,43 +79,28 @@ const ActiveRooms = ({className}) => {
       console.log("User list:", userList);
 
     return (
-        <div className={menuClasses}>
+        <div className='chatRooms' >
             <h3>Active Rooms</h3>
             <ul className="chatRoomLis">
                 {roomList.map((e) => (
-                    <li key={e.name}>
-                    <button className="custom-button"  color="primary" onClick={() => joinchatroom(e)}>{e.name}
+                    <div key={
+                        e.name}>
+                        <li className='singleRoom' key={e.name}>
+                            <p id='roomName'>{e.name}</p>
+                            <p id='roomTopic'> {e.topic}</p>
+                            
+                            <Button id='leaveBtn' variant="contained" onClick={() => leaveRoom(e)}>Leave</Button>
+                            <Button id='joinBtn' variant="contained" onClick={() => joinchatroom(e)}>Join</Button>
+                            <div id='roomUsers'>
                             {Object.values(e.users).map((user) => (
-                                <p id='usersInRoom' key={user}>{user}</p>
+                                 <p key={user} id='names'>{user}  </p>
                             ))}
-                    </button>
-                    {/* <Button onClick={() => leaveRoom(e)}>Leave</Button> */}
-                    </li>
-                ))}
+                            </div>
+                        </li>
+                    </div>))}
             </ul>
-            
         </div>
     );
 }
 
 export default ActiveRooms;
-
-// <h3>Active Rooms</h3>
-//             <ul className="chatRoomLis">
-//                 {roomList.map((e) => (
-//                     <div key={
-//                         e.name}>
-//                         <li className='singleRoom' key={e.name}>
-//                             <p id='roomName'>{e.name}</p>
-//                             <p id='roomTopic'> {e.topic}</p>
-                            
-//                             <Button id='leaveBtn' variant="contained" onClick={() => leaveRoom(e)}>Leave</Button>
-//                             <Button id='joinBtn' variant="contained" onClick={() => joinchatroom(e)}>Join</Button>
-//                             <div id='roomUsers'>
-//                             {Object.values(e.users).map((user) => (
-//                                  <p key={user} id='names'>{user}  </p>
-//                             ))}
-//                             </div>
-//                         </li>
-//                     </div>))}
-//             </ul>

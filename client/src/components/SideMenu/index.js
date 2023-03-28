@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import NewUser from '../NewUser';
 import './new_styles.scss';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:8080');
+// const socket = io.connect('http://localhost:8080');
 
 
 const SideMenu = ({ className }) => {
     const menuClasses = classNames('side-menu', className);
     const [userList, setUserList] = useState([]);
-    const location = useLocation();
-    const { username } = location.state;
+    const socket = useSelector(({socket}) => socket);
+    const username = useSelector(({session}) => session);
+    console.log("kem ég frá statinu?",username)
 
     useEffect(() => {
         socket.emit("users");

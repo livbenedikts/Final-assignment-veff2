@@ -1,0 +1,9 @@
+leave NewRoom
+
+
+set message history
+
+get ops
+kick out
+
+send private message

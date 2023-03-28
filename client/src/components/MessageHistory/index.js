@@ -7,18 +7,31 @@ import './styles.scss';
 const socket = io.connect('http://localhost:8080');
 
 const MessageHistory = () => {
-    const user = useSelector((session) => session.session);
+    const username = useSelector((session) => session.session);
     const [message, setMessage] = useState("");
     const [messageHistory, setMessageHistory] = useState([]);
+    const [historyLoaded, setHistoryLoaded] = useState(false);
     const location = useLocation();
     const roomName = location.state.roomName;
-
+    socket.username = username
 
     useEffect(() => {
+
+        socket.on("onjoin", (room, username) => {
+            // Request chat history when user joins room
+            socket.emit("getchat", { roomName: roomName });
+            console.log("onjoin", room, username);
+          });
+
         
         // listin for updates of the message history
         socket.on("updatechat", (room, data) => {
-            console.log("updatechat", room, data);
+            //add key to message
+            // add message to message history
+
+            setMessageHistory([...messageHistory, data]);
+            setHistoryLoaded(true);
+
         });
        
         // get list of users in the room
@@ -37,36 +50,49 @@ const MessageHistory = () => {
 
 
     const sendMessage = (e) => {
+
         e.preventDefault();
+        
         const data = {
             roomName,
             message: {
-                user,
+                username: socket.username,
                 timestamp: new Date().toLocaleString(),
                 message: message.substring(0, 200),
             }
         }
-        socket.emit("sendmsg", { username: user, roomName: roomName, msg: message })
-        setMessageHistory([...messageHistory, data.message])
+        console.log(data)
+        socket.emit("sendmsg", { username: socket.username, roomName: roomName, msg: message, timestamp: new Date().toLocaleString() })
+        // setMessageHistory([...messageHistory, data.message])
         setMessage('');
+        console.log("virka ég",messageHistory)
       };
+
+    //   {messageHistory.map((message) => (
+    //     console.log(message)))
+       
+
+    // }
+    console.log("messageHistory", messageHistory)
 
     return (
             <div className="chat">
-                <h1>Welcome to {roomName}, {user}</h1>
+                <h1>Welcome to {roomName}, {username}</h1>
                 <LeaveBtn roomID={roomName} />
-                 <div className="msgHistoryContainer">
-                    {messageHistory.map((message) => (
-                    <div key={message.timestamp} className="singleMsg">
-                        <span className="timestamp">{message.timestamp}</span>
-                        <span className="nick">{message.nick} </span>
-                        <span className="message">{message.message}</span>
+                <div className="msgHistoryContainer">
+                    {messageHistory.flatMap((messages, index) =>
+                        messages.map((message) => (
+                        <div key={message.timestamp + index} className={`singleMsg ${message.nick === username ? 'sent' : 'received'}`}>
+                            <span className="timestamp">{message.timestamp.substring(11, 16)}</span>
+                            <span className="nick">{message.nick} </span>
+                            <span className="message">{message.message}</span>
+                        </div>
+                        ))
+                    )}
                     </div>
-                    ))}
-                </div>
                 <form onSubmit={sendMessage} className="messageInput">
                     <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
-                    <button type="submit">Send</button>
+                    <button type="submit" onClick={sendMessage}>Send</button>
                 </form>       
         </div>
     );

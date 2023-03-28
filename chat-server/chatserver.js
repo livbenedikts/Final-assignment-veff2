@@ -27,6 +27,7 @@ rooms.lobby.setTopic("Welcome to the lobby!");
 
 io.on("connection", function (socket) {
   //This gets performed when a user joins the server.
+  console.log("User connected: " + socket.id);
   socket.on("adduser", function (username, fn) {
     //Check if username is avaliable.
     if (
@@ -43,6 +44,8 @@ io.on("connection", function (socket) {
         socket: this,
       };
       fn(true); // Callback, user name was available
+
+      console.log("User " + users[username] + " connected");
     } else {
       fn(false); // Callback, it wasn't available
     }
@@ -54,6 +57,11 @@ io.on("connection", function (socket) {
     var pass = joinObj.pass;
     var accepted = true;
     var reason;
+    socket.username = joinObj.username;
+
+    console.log(socket.username)
+
+     console.log("joinObj", joinObj)
 
     //If the room does not exist
     if (rooms[room] === undefined) {
@@ -112,11 +120,16 @@ io.on("connection", function (socket) {
       }
       fn(false, reason);
     }
+   
   });
 
   // when the client emits 'sendchat', this listens and executes
   socket.on("sendmsg", function (data) {
     var userAllowed = false;
+    console.log("User sent message to room: ", data);
+    socket.username = data.username;
+   
+    console.log(rooms[data.roomName].ops[socket.username])
 
     //Check if user is allowed to send message.
     if (rooms[data.roomName].users[socket.username] !== undefined) {
@@ -125,6 +138,7 @@ io.on("connection", function (socket) {
     if (rooms[data.roomName].ops[socket.username] !== undefined) {
       userAllowed = true;
     }
+    console.log("userAllowed", userAllowed)
 
     if (userAllowed) {
       //Update the message history for the room that the user sent the message to.
@@ -140,6 +154,8 @@ io.on("connection", function (socket) {
         rooms[data.roomName].messageHistory
       );
     }
+    console.log(rooms)
+
   });
 
   socket.on("privatemsg", function (msgObj, fn) {
@@ -153,6 +169,7 @@ io.on("connection", function (socket) {
       );
       //Callback recieves true.
       fn(true);
+     
     }
     fn(false);
   });

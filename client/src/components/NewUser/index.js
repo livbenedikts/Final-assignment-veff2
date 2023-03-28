@@ -4,20 +4,15 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Button, Stack, TextField } from '@mui/material';
 import { addSession } from '../../actions/sessionActions';
-
 const socket = io.connect('http://localhost:8080');
 
 const NewUser = () => {
-
     const [username, setUsername] = useState('');
     const [usernameAvailable, setUsernameAvailable] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const handleKeyPress = (event) => { if (event.key === 'Enter') {}};
 
-    const handleKeyPress = (event) => {
-        if (event.key === 'Enter') {
-        }
-    }
     const handleFormSubmit = (event) => {
         event.preventDefault(); // Prevent the default form submission
         addUser(); // Call the addUser function
@@ -28,24 +23,13 @@ const NewUser = () => {
             if (isAvailable) {
                 console.log('Username is available', username);
                 dispatch(addSession(username));
+                console.log(addSession(username))
                 navigate('/activeRooms', { state: { username } });                 
            
             } else {
                 setUsernameAvailable(false);
             }
-        });
-    };
-
-    useEffect(() => {
-        socket.on('username', (username) => {
-            setUsername(username);
-            console.log('username', username);
-          });
-
-        return () => {
-            socket.off('username');
-        }
-    }, [socket]);
+        }); };
 
     return (
         <div className='usernameContainer'>
@@ -58,8 +42,5 @@ const NewUser = () => {
             </Stack>
         </div>
     );
-
-
-
 }
 export default NewUser;

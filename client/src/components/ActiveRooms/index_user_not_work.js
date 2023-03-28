@@ -1,61 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
 import io from 'socket.io-client';
 import './styles.scss'
-import { addSession } from '../../actions/sessionActions';
+import { useLocation } from 'react-router-dom';
 const socket = io.connect('http://localhost:8080');
 
 const ActiveRooms = ({className}) => {
     const menuClasses = classNames('activeRooms', className);
-    const socket = useSelector(({socket}) => socket);
-    const username = useSelector(({session}) => session);
-    const [userList, setUserList] = useState([]);
+    // const socket = useSelector(({socket}) => socket);
+    const user = useSelector((session) => session);
+
     const [room, setRoom] = useState("");
     const [roomList, setRoomList] = useState([]);
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
-    
-    console.log("ég",username)
+    const location = useLocation();
+    const { username } = location.state;
+
+    console.log(socket)
+    console.log("kem ég frá statinu?",user)
+
+
     useEffect(() => {
-        // Get the list of available rooms when the component mounts
         socket.emit("rooms");
-  
-        // Get the list of connected users when the component mounts
         socket.emit("users");
-        socket.on("userlist", (userlist) => {
-            setUserList(userlist);
-            
-          });
     
         // Listen for updates to the list of available rooms
         socket.on("roomlist", (room) => {
             setRoomList(
               Object.entries(room).map (([key, value]) =>  (
-                  {
-                      name: key,
-                      ...value,
-                  })
+                  { name: key,
+                      ...value,})
               ))
-        });
+        });  
         return () => {
-          socket.off("roomlist");
-        socket.off("userlist");
-          console.log(room)
+            socket.off("roomlist");
+             console.log(room)
         }
       }, [socket]);
-    
 
-      const joinchatroom =(e) => {
-        // create the joinObject
+    //   const joinRoom = (e) => {
+    //     // socket.emit('joinroom', {room: e.name, pass: "" }, (success) => {
+    //         socket.emit("joinroom", { room: e.name, pass: undefined, user: username }, function (success) {
+    //         if (success) {  
+    //             var room = e;
+    //             navigate('/chat', { state: { username,room } });
+    //         } else {
+    //             console.log('fail');}
+    //     })
+    // };
+
+
+    const joinchatroom =(e) => {
         socket.username=username;
 
-
-   
-        socket.emit("joinroom" ,{ room: e.name, username: socket.username}, (success) => {
+        
+        socket.emit("joinroom" ,{room: e.name, username:socket.username }, (success) => {
             if (success) {
+                console.log('success');
                 const roomName = e.name;
                 navigate('/chat', { state: { roomName } });
     
@@ -63,7 +67,7 @@ const ActiveRooms = ({className}) => {
                 console.log('fail');}
         })
     }
-       
+
     const leaveRoom = (e) => {
         e.preventDefault();
         if (username && room) {
@@ -77,8 +81,6 @@ const ActiveRooms = ({className}) => {
           });
         }
       };
-
-      console.log("User list:", userList);
 
     return (
         <div className={menuClasses}>
@@ -95,29 +97,10 @@ const ActiveRooms = ({className}) => {
                     </li>
                 ))}
             </ul>
-            
         </div>
     );
 }
 
 export default ActiveRooms;
 
-// <h3>Active Rooms</h3>
-//             <ul className="chatRoomLis">
-//                 {roomList.map((e) => (
-//                     <div key={
-//                         e.name}>
-//                         <li className='singleRoom' key={e.name}>
-//                             <p id='roomName'>{e.name}</p>
-//                             <p id='roomTopic'> {e.topic}</p>
-                            
-//                             <Button id='leaveBtn' variant="contained" onClick={() => leaveRoom(e)}>Leave</Button>
-//                             <Button id='joinBtn' variant="contained" onClick={() => joinchatroom(e)}>Join</Button>
-//                             <div id='roomUsers'>
-//                             {Object.values(e.users).map((user) => (
-//                                  <p key={user} id='names'>{user}  </p>
-//                             ))}
-//                             </div>
-//                         </li>
-//                     </div>))}
-//             </ul>
+
