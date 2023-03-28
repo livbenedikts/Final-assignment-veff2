@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import './styles.scss';
+import { useLocation } from 'react-router-dom';
+import NewUser from '../NewUser';
+import './new_styles.scss';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:8080');
 
 
-
-const SideMenu = () => {
-
-    // const getActiveUsers = useSelector((session) => session.username);
-    const getActiveUsers = useSelector((session) => session);
+const SideMenu = ({ className }) => {
+    const menuClasses = classNames('side-menu', className);
     const [userList, setUserList] = useState([]);
-    const socket = useSelector(({socket}) => socket);
+    const location = useLocation();
+    const { username } = location.state;
 
-    // console.log("jæ",getActiveUsers.id)
     useEffect(() => {
-        // socket.emit("rooms");
         socket.emit("users");
 
-        socket.on("userlist", (users) => {
-            setUserList(users);
-        });
+        socket.on("userlist", (userlist) => {
+            console.log("User list:", userlist);
+            setUserList(userlist);
+          });
 
         return () => {
             socket.off("userlist");
         }
     }, [socket]);
 
-    // console.log(userList)
 
     return (
-        <div className='sidebarContainer'>
+        <div id="side-menu" className={menuClasses}>
             <div className='activeUsers' >
-                <h3>Active Users </h3>
+            <h3>Welcome, {username}</h3> 
+                <h4>Active Users </h4>
+               
                 <ul className="actUserLis">
                     {userList.map((user) => (
                         <li key={user}>

@@ -1,0 +1,41 @@
+/* MainView */
+.container {
+    display: grid;
+    grid-template-areas: 
+    "sidebar main";
+    grid-template-columns: 200px 1fr;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 50px;
+    width: 100%;
+  }
+.sideBar {
+   grid-area: sidebar;
+}
+.mainMenu {
+    grid-area: main;
+    margin: auto;
+    display: grid;
+    grid-template-areas:
+    "header"
+    "createRoom"
+    "roomList";
+    grid-template-rows: 100px 100px auto;
+}
+  
+.pageHeader {
+    grid-area: header;
+    font-size: 36px;
+    text-align: center;
+    margin: 50px auto;
+  }
+
+.createRoomBtn {
+    grid-area: createRoom;
+    margin: auto;
+}
+
+.activeRooms{
+    grid-area: roomList;
+    margin: auto;
+}

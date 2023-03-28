@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from "react";
+import { io } from "socket.io-client";
+import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
 import { Button, Stack, TextField } from '@mui/material';
-import './styles.scss';
-import { useSelector, useDispatch } from 'react-redux';
 import { addSession } from '../../actions/sessionActions';
+
 const socket = io.connect('http://localhost:8080');
 
-function WelcomeView( ) {
-    const socket = useSelector(({socket}) => socket);
+const NewUser = () => {
+
     const [username, setUsername] = useState('');
     const [usernameAvailable, setUsernameAvailable] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            console.log('hæ');
         }
     }
     const handleFormSubmit = (event) => {
@@ -38,6 +36,17 @@ function WelcomeView( ) {
         });
     };
 
+    useEffect(() => {
+        socket.on('username', (username) => {
+            setUsername(username);
+            console.log('username', username);
+          });
+
+        return () => {
+            socket.off('username');
+        }
+    }, [socket]);
+
     return (
         <div className='usernameContainer'>
             <Stack component="form" noValidate autoComplete="off" onSubmit={handleFormSubmit}>
@@ -49,5 +58,8 @@ function WelcomeView( ) {
             </Stack>
         </div>
     );
+
+
+
 }
-export default WelcomeView;
+export default NewUser;
