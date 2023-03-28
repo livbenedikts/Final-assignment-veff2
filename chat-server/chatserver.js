@@ -406,8 +406,4 @@ function Room() {
 
 server.listen(8080, () => {
   console.log(`Listening on :8080`);
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> ab105edfcfe26abb75377a010dd27da70b024b66

@@ -60,7 +60,6 @@ const Chat = () => {
   return (
     <div>
       <h1>Welcome to </h1>
-<<<<<<< HEAD
       <div id="messages"></div>
       <form onSubmit={sendMessage}>
         <input
@@ -75,16 +74,3 @@ const Chat = () => {
   );
 };
 export default Chat;
-=======
-      <div id="messages">
-      </div>
-      <form onSubmit={sendMessage}>
-        <input type="text" value={message} onChange={handleMessageChange} onBlur={handleMessageBlur} 
-         />
-        <button type="submit" >Send</button>
-      </form>
-    </div>
-  );
-}
-export default Chat;
->>>>>>> ab105edfcfe26abb75377a010dd27da70b024b66
