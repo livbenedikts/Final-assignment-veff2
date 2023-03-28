@@ -97,7 +97,6 @@ io.on("connection", function (socket) {
         fn(true);
         //Add user to room.
         rooms[room].addUser(socket.username);
-
         //Keep track of the room in the user object.
         users[socket.username].channels[room] = room;
         //Send the room information to the client.
@@ -407,4 +406,8 @@ function Room() {
 
 server.listen(8080, () => {
   console.log(`Listening on :8080`);
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> ab105edfcfe26abb75377a010dd27da70b024b66

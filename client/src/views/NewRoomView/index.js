@@ -1,6 +1,18 @@
+<<<<<<< HEAD
 import React, {  } from 'react';
 import NewRoom from '../../components/NewRoom';
 import './styles.scss';
+=======
+import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import io from 'socket.io-client';
+import NewRoom from '../../components/NewRoom';
+import { Box } from '@mui/system';
+import { TextField, Button, FormLabel, FormControl,FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import './styles.scss';
+const socket = io.connect('http://localhost:8080');
+>>>>>>> ab105edfcfe26abb75377a010dd27da70b024b66
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 
