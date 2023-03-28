@@ -1,0 +1,43 @@
+.createRoomContainer {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-areas: 
+        "title"
+        "NameTopic"
+        "Password";
+    grid-template-rows: 1fr 2fr;
+    gap: 1rem;
+    margin: auto;
+    margin-top: 20px;
+   
+}
+.h2 {
+    grid-area: title;
+    text-align: center;
+}
+
+.roomNameTopicContainer {
+    grid-area: NameTopic;
+    gap: 5px;
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.passwordContainer {
+    grid-area: Password;
+    display: grid;
+    float: left;
+    grid-auto-flow: row;
+    gap: 5px;
+    width: 100%;
+}
+
+#password {
+   float: left;
+}
+
+#radiogroups {
+    justify-self: center;
+    gap: 15px;
+}
