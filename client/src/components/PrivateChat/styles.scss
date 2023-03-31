@@ -1,63 +1,67 @@
-.chat {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 10px;
-  }
-// .msgHistoryContainer{
-//     height: 300px;
-//     overflow-y: scroll;
-//     overflow-x: hidden;
-//     width: 500px;
-//     padding: 10px;
-//     border: 1px solid black;
-// }
 
-.msgHistoryContainer {
-    display: flex;
-    flex-direction: column;
+.msgWrapper {
+    overflow: hidden;
+  }
+  .msgHistoryContainer {
+    display: grid;
+    grid-area: msgbody;
+    overflow: hidden;
     overflow-y: scroll;
-    height: 80%;
+    height: 700px;
     margin-bottom: 10px;
     border: 1px solid black;
     border-radius: 5px;
   }
-.singleMsg {
+  
+  .singleMsg {
+    // display: flex;
     display: grid;
     background-color: #f7f0f0;
     border-radius: 5px;
-    padding: 10px;
-    width: fit-content;
+    padding: 20px;
     grid-template-areas: 
-    "nick"
-    "message"
-    "timestamp";
+      "nick"
+      "message"
+      "timestamp";
     align-items: center;
     margin: 5px;
     margin-bottom: 15px;
-}
+    width: fit-content;
 
+  }
+  
+  .singleMsg.sent {
+    background-color: #eccfcf;
+    justify-self: end;
+  }
+  
+  .singleMsg.received {
+    justify-content: flex-start;
+  }
+  
   .nick {
     grid-area: nick;
     font-weight: bold;
-    margin-right: 5px;
   }
   
   .message {
     grid-area: message;
     word-wrap: break-word;
-    margin: 5px;
+    margin: 5px 0;
+    margin-right: 5px;
     padding-bottom: 4px;
+    font-size: 1.2rem;
   }
   
   .timestamp {
-   
     grid-area: timestamp;
     font-size: 0.7rem;
     color: #999;
+    margin-left: auto;
   }
   
   .messageInput {
+    grid-area: messageInput;
     display: flex;
     margin-top: auto;
     height: 50px;
@@ -79,7 +83,4 @@
     background-color: #2196f3;
     cursor: pointer;
   }
-  
-  
-  
   

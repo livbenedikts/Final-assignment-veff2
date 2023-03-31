@@ -55,6 +55,8 @@ io.on("connection", function (socket) {
     var accepted = true;
     var reason;
 
+    console.log(joinObj);
+
     //If the room does not exist
     if (rooms[room] === undefined) {
       rooms[room] = new Room();
@@ -72,6 +74,7 @@ io.on("connection", function (socket) {
       //Update topic
       socket.emit("updatetopic", room, rooms[room].topic, socket.username);
       io.sockets.emit("servermessage", "join", room, socket.username);
+      console.log(rooms[room]);
     } else {
       //If the room isn't locked we set accepted to true.
       if (rooms[room].locked === false) {
@@ -112,6 +115,7 @@ io.on("connection", function (socket) {
       }
       fn(false, reason);
     }
+    
   });
 
   // when the client emits 'sendchat', this listens and executes
@@ -204,6 +208,9 @@ io.on("connection", function (socket) {
       socket.username + " kicked " + kickObj.user + " from " + kickObj.room
     );
 
+    console.log(rooms[kickObj.room].ops);
+
+
     if (rooms[kickObj.room].ops[socket.username] !== undefined) {
       //Remove the user from the room roster.
       delete rooms[kickObj.room].users[kickObj.user];
@@ -229,6 +236,7 @@ io.on("connection", function (socket) {
     console.log(
       socket.username + " opped " + opObj.user + " from " + opObj.room
     );
+    console.log(opObj)
     if (rooms[opObj.room].ops[socket.username] !== undefined) {
       //Remove the user from the room roster.
       delete rooms[opObj.room].users[opObj.user];
@@ -334,10 +342,10 @@ io.on("connection", function (socket) {
         topicObj.topic,
         socket.username
       );
-      fn(true);
+    //   fn(true); // causes server to crash
     }
     //Return false if topic was not set.
-    fn(false);
+    // fn(false);
   });
 
   //Password locks the room.

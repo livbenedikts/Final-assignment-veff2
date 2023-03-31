@@ -1,0 +1,134 @@
+.chatRoom {
+
+    height: 100%;
+  }
+  
+  .msgWrapper { 
+    overflow: hidden;
+    overflow-y: scroll;
+  
+    margin: auto;
+  }
+  
+.msgHistoryContainer {
+    display: flex;   
+     flex-direction: column;
+    overflow-y: scroll;
+    height: 700px;
+    width: 80%;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+   overflow-y: scroll;
+//    grid-template-areas: "received sent";
+//     grid-template-columns: 1/2 1/2;
+//     grid-template-rows: repeat(2, 1fr);
+
+ 
+   
+  }
+  .singleMsg {
+    width: fit-content;
+    height: fit-content;
+    display: grid;
+    background-color: #f7f0f0;
+    border-radius: 5px;
+    padding: 20px;
+    grid-template-areas: 
+        "nick"
+        "message"
+        "timestamp";
+    margin: 5px;
+    margin-bottom: 15px;
+  }
+  
+  .singleMsg.sent {
+
+    background-color: #eccfcf;
+    width: fit-content;
+    height: fit-content;
+    float: right;
+    margin-left: auto;
+
+  }
+  
+  .singleMsg.received {
+    background-color: #F8F8F8;
+  }
+  
+  .timestamp {
+    font-size: 12px;
+    margin-right: 5px;
+  }
+  
+  .nick {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  
+  .messageInput {
+    grid-area: messageInput;
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    height: 50px;
+    width: 80%;
+  }
+  
+  .messageInput #input {
+    height: 100%;
+    width: 85%;
+    padding: 10px;
+    border: 0.5px solid #ccc;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .messageInput button {
+    height: 100%;
+    width: 15%;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    color: #fff;
+    background-color: #2196f3;
+    cursor: pointer;
+  }
+
+.actionCommands {
+    list-style: none;
+    background-color: beige;
+    width: 600px;
+    padding: 15px;
+}
+
+.actionCommands span{
+  
+    //make italic
+    font-style: italic;
+}
+
+.actionCommands #description{
+    font-style: italic;
+    font-size: 12px;
+    padding-left: 15px;
+}
+
+// .groupMembers{
+//     height: 300px;
+//     align-items: center;
+//     padding: 20px;
+//     margin-left: 30px;
+//     display: grid;
+//     grid-template-areas:
+//     "title users";
+//     grid-template-columns: 3fr 1fr;
+//     gap: 20px;
+// }
+// .groupMembers p{
+//     font-size: 1.2rem;
+//     margin-bottom: 10px;
+// }
+
+// .groupMembers #Actions button{
+//     margin: 5px;
+// }

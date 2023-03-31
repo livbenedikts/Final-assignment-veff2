@@ -14,7 +14,7 @@ const HomeButton = ({ className }) => {
 
   return (
     // inline style, float: right
-    <div>
+    <div className="homeBtn">
       <Button variant="contained" color="primary" onClick={handleHome}>
         Back to Active Rooms
       </Button>

@@ -1,0 +1,22 @@
+.chat {
+    display: grid;
+    grid-template-areas: 
+      "welcomeheader"
+      "leavebtn"
+      "msgbody "
+      "messageInput";
+    padding: 10px;
+    width: 90%;
+  }
+  
+  .h1 {
+    grid-area: welcomeheader;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .leavebutton {
+    grid-area: leavebtn;
+    margin: auto;
+  }

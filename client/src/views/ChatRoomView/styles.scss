@@ -1,0 +1,28 @@
+.chatRoomView{
+    height: 100%;
+    margin: 30px 10px;
+    margin-top: 50px;
+    display: grid;
+    grid-template-areas: 
+    "HomeButton LeaveButton"
+    "ChatRoom ChatRoom";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 80px 1fr;
+}
+
+
+.homeBtn {
+    grid-area: HomeButton;   
+} 
+
+.leaveBtn {
+    grid-area: LeaveButton;
+}
+
+.chatContainer {
+    grid-area: ChatRoom;
+    justify-content: center;
+    margin-top: 0;
+   
+}
+

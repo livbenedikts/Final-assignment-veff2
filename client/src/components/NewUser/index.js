@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Stack, TextField } from "@mui/material";
@@ -11,6 +11,11 @@ const NewUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Get the list of connected users when the component mounts
+    socket.emit("users");
+    }, []);
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
     }
@@ -21,6 +26,7 @@ const NewUser = () => {
   };
 
   const addUser = () => {
+    
     socket.emit("adduser", username, (isAvailable) => {
       if (isAvailable) {
         console.log("Username is available", username);
@@ -28,6 +34,7 @@ const NewUser = () => {
         navigate("/activeRooms");
       } else {
         setUsernameAvailable(false);
+        alert("Sorry username is taken!");
       }
     });
   };
@@ -42,11 +49,12 @@ const NewUser = () => {
       >
         <TextField
           id="username-text-field"
+          inputProps={{ style: { textTransform: "capitalize" } }}
           value={username}
           onChange={(event) => {
             setUsername(event.target.value);
           }}
-          label="username"
+          label="Username"
           variant="standard"
           onKeyDown={handleKeyPress}
         />

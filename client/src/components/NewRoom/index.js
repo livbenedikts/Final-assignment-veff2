@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, TextField, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../../socket";
@@ -6,13 +6,13 @@ import { useSelector } from "react-redux";
 
 const NewRoom = () => {
   const username = useSelector((state) => state.session.username);
-  const [user, setUser] = React.useState(username);
   const [room, setRoom] = React.useState("");
   const [pass, setPass] = React.useState(undefined);
   const [topic, setTopic] = React.useState("");
   const [locked, setLocked] = React.useState(false);
   const [roomList, setRoomList] = React.useState([]);
   const navigate = useNavigate();
+  const [roomObj, setRoomObj] = useState([]);
 
   const handlePasswordChange = (event) => {
     setPass(event.target.value);
@@ -70,15 +70,21 @@ const NewRoom = () => {
     //     // locked: locked,
     //     username: username
     // }
-    socket.emit("joinroom", { room: room, pass: undefined }, (success) => {
+    var roomObj = {name: room, pass: pass, topic: topic, locked: locked, username: username, users: username}
+    console.log(roomObj);
+    setRoomObj(roomObj);
+    socket.emit("joinroom", { room: roomObj.name, pass: roomObj.pass }, (success) => {
       if (success) {
-        console.log("success");
-        alert("room created");
-        // var roomName = room;
-        // var room = room.room;
-        // console.log('New room ',roomName, 'created by ', username);
+        console.log(roomObj.topic);
+        
+        if (roomObj.topic !== undefined) {
+            socket.emit("settopic", {room: roomObj.name, topic: roomObj.topic})
+        }
+        alert("New room created!");
+        
+        
         console.log(room);
-        // navigate("/chat", { state: { roomName, room} })
+        navigate("/activeRooms");
       } else {
         console.log("fail");
       }
@@ -98,6 +104,7 @@ const NewRoom = () => {
         <TextField
           id="roomname-text-field"
           value={room}
+          inputProps={{ style: { textTransform: "capitalize" } }}
           onChange={handleRoomChange}
           onBlur={handleRoomBlur}
           label="Room name"
@@ -107,6 +114,7 @@ const NewRoom = () => {
           id="outlined-number"
           label="Topic"
           type="text"
+          inputProps={{ style: { textTransform: "capitalize" } }}
           value={topic}
           onChange={handleTopicChange}
           onBlur={handleTopicBlur}
